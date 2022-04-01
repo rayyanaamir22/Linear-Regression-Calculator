@@ -1,6 +1,6 @@
 '''
 Name: Rayyan A
-Date: March 22, 2022
+Date: April 1, 2022
 Program: Linear Regression Calculator
 '''
 
@@ -11,26 +11,27 @@ import os
 import functions as f
 import equations as e
 import results as res
+import goodbye as g
 
 # PROGRAM START
 
 while True:
-  
   # Title
   print('LINEAR REGRESSION CALCULATOR\n')
 
-  # How to use 
-  
-    
-  #f.createDataPoints()
+  # How to use
+
+  f.createDataPoints()
 
   # DATA ANALYSIS FUNCTIONS
 
   # Convert imported data sets to Python-readable lists
   f.translateDatabase()
-  print('X squared list: ', f.squared(f.dataX, f.squareX))
-  print('Y squared list: ', f.squared(f.dataY, f.squareY))
-  print('XY list: ', f.multiply(f.rCopyX, f.rCopyY))
+
+  # For equations
+  f.squared(f.dataX, f.squareX) # Produce squareX
+  f.squared(f.dataY, f.squareY) # Produce squareY
+  f.multiply(f.rCopyX, f.rCopyY) # Produce dataXY
 
   # Calculate the line of best fit equation (y=ax+b)
   e.linearRegressionAlgorithm() 
@@ -40,12 +41,13 @@ while True:
 
   # Return the results
   res.correlationResults()
-
+  
   if res.reuse():
+    os.system('clear')
     continue
   else:
     os.system('clear')
-    print('Thanks for using this program.')
+    print(g.getFarewellStatement(g.farewellStatements), end='.')
     break
-
+  
 # PROGRAM END
