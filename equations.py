@@ -10,16 +10,26 @@ def linearRegressionAlgorithm():
   # Write out the line of best fit equation. Consider BEDMAS/PEMDAS
 
   # Separate the equation into numerator and demonimator for simplicity in calculating
-  aNumerator = (f.n*sum(f.dataXY))-(sum(f.dataX)*sum(f.dataY))
-  aDemonimator = (f.n*sum(f.squareX))-((sum(f.dataX))**2)
+  global aNumerator
+  global aDenominator
+  aNumerator = (f.n*sum(f.dataXY))-(sum(f.tDataX)*sum(f.tDataY))
+  aDemonimator = (f.n*sum(f.squareX))-((sum(f.tDataX))**2)
 
   # Find a (slope of line of best fit)
   global a
-  a = aNumerator/aDemonimator
-
-  # Use slope a and mean X and Y values to determine y-intercept b
   global b
-  b = f.meanY - (a*f.meanX)
+  global verticalLine
+  try:
+    a = aNumerator/aDemonimator
+    verticalLine = False
+    
+    # Use slope a and mean X and Y values to determine y-intercept b
+    b = f.meanY - (a*f.meanX)
+  except ZeroDivisionError:
+    verticalLine = True
+    a = 0
+    b = 0
+    print()
 
 
 def correlationCoefficientAlgorithm():
@@ -29,17 +39,21 @@ def correlationCoefficientAlgorithm():
   global r # Let r represent the Pearson correlation coefficient
   
   # Not sure if this works
-  #r = covariance / (deviationX * deviationY)
-  rNumerator = f.n*sum(f.dataXY) - sum(f.dataX)*sum(f.dataY)
-  rDenominator = math.sqrt((f.n*sum(f.squareX)-math.sqrt(sum(f.dataX)))*((f.n*sum(f.squareY)-sum(f.dataY))))
+  rNumerator = f.n*sum(f.dataXY) - sum(f.tDataX)*sum(f.tDataY)
+  rDenominator = math.sqrt((f.n*sum(f.squareX)-(sum(f.tDataX))**2)*(f.n*sum(f.squareY)-(sum(f.tDataY))**2))
+  try:
+    r = rNumerator/rDenominator
+  except ZeroDivisionError: # This happens when all y coordinates are equal
+    r = 0
+
+
   
-  r = rNumerator/rDenominator
-  ar = abs(r) # Absolute value for convenience
   
   global rStrength # Overall correlation
   global rProportionality # Direct or inverse
-  # r should always be within 1 and -1.
-  if ar > 1:
+  global ar
+  ar = abs(r) # Absolute value for convenience
+  if ar > 1: # r should always be within 1 and -1.
     print('Something went wrong; r ≯ ±1') # Is not greater than magnitude of 1
     rStrength = 'Error'
     rProportionality = 'Error'
@@ -49,19 +63,19 @@ def correlationCoefficientAlgorithm():
     
   # An r value of 0 means there is zero correlation between the data (extremely unlikely and coincidental)
   if r == 0:
-    rProportionality = None
+    rProportionality = 'no'
   elif r > 0: # Directly proportional
     rProportionality = 'direct'
   elif r < 0: # Inversely proportional
     rProportionality = 'inverse'
   
   if r == 0:
-    rStrength = None
+    rStrength = 'no'
   elif ar > 0 and ar <= 0.33:
-    rStrength = 'weak'
+    rStrength = 'a weak'
   elif ar > 0.33 and ar <= 0.67:
-    rStrength = 'moderate'
+    rStrength = 'a moderate'
   elif ar > 0.67 and ar < 1:
-    rStrength = 'strong'
+    rStrength = 'a strong'
   elif ar == 1:
-    rStrength = 'perfect'
+    rStrength = 'a perfect'
