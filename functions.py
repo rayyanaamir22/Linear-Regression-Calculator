@@ -4,58 +4,89 @@
 import numpy as np
 import os
 
-# User creates their custom 2D array of data points
+# User creates their custom array of data points
 def createDataPoints():
   
-  global userArray
-  userArray = []
-  global arrayInput
-  global arrayComplete
-  arrayComplete = False
-  while arrayComplete == False:
-    try: # Try statement will force input to be an integer
-      arrayInput = int(input('Enter data points as ordered pairs. (X, Y)'))
-      if type(arrayInput) == int: # If input is valid
-        userArray.append(arrayInput) # Add it to the list
-        while True: # Program asks user if they are finished the array
-          os.system('clear')
-          print('Current array: ', userArray)
-          print('\nIs array complete?')
-          concludeArray = input()
-          
-          if concludeArray.lower().startswith('y'): # If yes
-            arrayComplete = True # The outermost loop will stop running
-            break
-          elif concludeArray.lower().startswith('n'): # If no
-            break
-          else:
-            print('(Answer yes or no)') # If invalid input
-      else:
-        os.system('clear')
-        print('Please enter a whole number.')
-    except (TypeError, ValueError): # If original input was not an integer
-      os.system('clear')
-      print('Please enter an integer.')
+  global dataPoints
+  dataPoints = []
+  global dataInput
+  global dataComplete
+  dataComplete = False
+  while dataComplete == False:
 
-# Assign the data points under the lists used in the program
+    # X COORDINATES
+    while True:
+      try: # Try statement will force input to be a number
+        dataInput = float(input('Enter X value: '))
+        if type(dataInput) == float or type(dataInput) == int: # If input is a number
+          dataPoints.append(dataInput) # Add it to the list
+          break
+        else:
+          os.system('clear')
+          print('Please enter a number.')
+      except (TypeError, ValueError): # If original input was not a number
+        os.system('clear')
+        print('Please enter a number.')
+
+    # Y COORDINATES (mostly same as X)
+    yValid = False # Variable to account for the nested loop
+    while yValid == False:
+      try: # Try statement will force input to be a number
+        dataInput = float(input('Enter Y value: '))
+        if type(dataInput) == float or type(dataInput) == int: # If input is a number
+          dataPoints.append(dataInput) # Add it to the list
+          yValid = True
+          # When adding Y coordinate, the user can state that the list is finished and exit this process.
+          while True: 
+            os.system('clear')
+            print('Current array: ', dataPoints)
+            print('\nDo you want to add more points?')
+            concludeData = input()
+            if concludeData.lower().startswith('n'): # If yes
+              if len(dataPoints)/2 == 1: # Not enough points
+                print('There must be atleast 2 data points.\n')
+                dataComplete = False
+                break
+              else:
+                dataComplete = True # The outermost loop will stop running
+                os.system('clear')
+                break 
+            elif concludeData.lower().startswith('y'): #If no
+              break
+            else:
+              print('(Answer yes or no)') # If invalid input
+        else:
+          os.system('clear')
+          print('Please enter a number.')
+      except (TypeError, ValueError): # If original input was not a number
+        os.system('clear')
+        print('Please enter a number.')
+
+# CONVERT DATA TO LISTS for equations
 def translateDatabase():
   # Assign a variable for each component of the data being imported. They will be used for the impending statistics equations.
 
   # Use names of imported data
   global xAxis
   global yAxis
-  xAxis = 'yAxis'
-  yAxis = 'xAxis'
+  xAxis = 'xAxis'
+  yAxis = 'yAxis'
   
   # Let n represent the number of data points being imported
   global n
+  #n = len(dataPoints)/2 
+    
   
   # Let x represent the independent variable; the presumed cause of sea otter population decline
   global dataX
+  global tDataX
   global meanX
   global squareX
   global rCopyX
-  dataX = [1,2,3] # Should these be converted to tuples?
+  dataX = []
+  dataX.append(dataPoints[::2]) # Every other value (from 0)
+  dataX = [i for j in dataX for i in j] # Strip double brackets
+  tDataX = tuple(dataX) # Create a tuple of dataX
   rCopyX = list(dataX) # Copy for recursion
   n = len(dataX)
   meanX = np.mean(dataX)
@@ -63,10 +94,14 @@ def translateDatabase():
   
   # Let y represent the dependent variable; the sea otter population itself
   global dataY
+  global tDataY
   global meanY
   global squareY
   global rCopyY
-  dataY = [3,2,1]
+  dataY = []
+  dataY.append(dataPoints[1::2]) # Every other value (from 1)
+  dataY = [i for j in dataY for i in j] # Strip double brackets
+  tDataY = tuple(dataY) # Create a tuple of dataY
   rCopyY = list(dataY) # Copy for recursion
   meanY = np.mean(dataY)
   squareY = []
@@ -80,14 +115,10 @@ def translateDatabase():
   global deviationX
   global deviationY
   # Covariance is a measure of how strongly two connected variables X adn Y affect eachother.
-  
   covariance = np.cov(dataX, dataY) 
   # Standard Deviation is the frequency to deviate from the main stream
-  
   deviationX = np.std(dataX)
   deviationY = np.std(dataY)
-
-# The squaring recursion is not working
 
 # Use recursion to create list of squared values
 def squared(data, squareData):
@@ -107,7 +138,3 @@ def multiply(data1, data2):
     data1.pop(0) 
     data2.pop(0)
     return multiply(data1, data2)
-
-def comperehensionAlgorithm():
-  # This algorithm will yield solutions to the problem
-  print()
