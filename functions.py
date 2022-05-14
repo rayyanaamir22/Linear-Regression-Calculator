@@ -2,7 +2,15 @@
 
 # Modules
 import numpy as np
+import time
+#from scipy import stats
+import matplotlib.pyplot as plt
+import pylab
 import os
+
+# Other files
+import equations as e
+import results as res
 
 # User creates their custom array of data points
 def createDataPoints():
@@ -63,78 +71,148 @@ def createDataPoints():
         print('Please enter a number.')
 
 # CONVERT DATA TO LISTS for equations
-def translateDatabase():
-  # Assign a variable for each component of the data being imported. They will be used for the impending statistics equations.
-
-  # Use names of imported data
-  global xAxis
-  global yAxis
-  xAxis = 'xAxis'
-  yAxis = 'yAxis'
-  
-  # Let n represent the number of data points being imported
-  global n
-  #n = len(dataPoints)/2 
-    
-  
-  # Let x represent the independent variable; the presumed cause of sea otter population decline
-  global dataX
-  global tDataX
-  global meanX
-  global squareX
-  global rCopyX
-  dataX = []
-  dataX.append(dataPoints[::2]) # Every other value (from 0)
-  dataX = [i for j in dataX for i in j] # Strip double brackets
-  tDataX = tuple(dataX) # Create a tuple of dataX
-  rCopyX = list(dataX) # Copy for recursion
-  n = len(dataX)
-  meanX = np.mean(dataX)
-  squareX = []
-  
-  # Let y represent the dependent variable; the sea otter population itself
-  global dataY
-  global tDataY
-  global meanY
-  global squareY
-  global rCopyY
-  dataY = []
-  dataY.append(dataPoints[1::2]) # Every other value (from 1)
-  dataY = [i for j in dataY for i in j] # Strip double brackets
-  tDataY = tuple(dataY) # Create a tuple of dataY
-  rCopyY = list(dataY) # Copy for recursion
-  meanY = np.mean(dataY)
-  squareY = []
-  
-  # Let xy represent the product of x and y in their respective ordered pairs
-  global dataXY
-  dataXY = []
-  
-  # Covariance and Standard Deviation
-  global covariance
-  global deviationX
-  global deviationY
-  # Covariance is a measure of how strongly two connected variables X adn Y affect eachother.
-  covariance = np.cov(dataX, dataY) 
-  # Standard Deviation is the frequency to deviate from the main stream
-  deviationX = np.std(dataX)
-  deviationY = np.std(dataY)
-
-# Use recursion to create list of squared values
+# Recursively create list of squared values
 def squared(data, squareData):
   if len(squareData) == n: # BASE CASE: If list is complete...
     return squareData
   else:
-    squareData.append(data[0]**2) # Append squared x value
+    squareData.append(data[0]**2) # Append squared value
     data.pop(0)
     return squared(data, squareData)
 
-# Use recursion to create list of the products of dataX and dataY
-def multiply(data1, data2):
+# Recursively create list of XY dot products
+def dotProduct(data1, data2):
   if len(dataXY) == n: # BASE CASE: If list is complete...
     return dataXY
   else:
     dataXY.append(data1[0] * data2[0]) # Append product of ordered pair
     data1.pop(0) 
     data2.pop(0)
-    return multiply(data1, data2)
+    return dotProduct(data1, data2)
+
+# CONVERT DATA TO LISTS for equations
+def translateData():
+  # Assign a variable for each component of the data being imported. They will be used for the impending statistics equations.
+  
+  # Let x represent the independent variable
+  global dataX, meanX, squareX
+  dataX = []
+  dataX.append(dataPoints[::2]) # Every other value (from 0)
+  dataX = [i for j in dataX for i in j] # Strip double brackets
+  squareX = []
+  
+  # Let y represent the dependent variable
+  global dataY, meanY, squareY
+  dataY = []
+  dataY.append(dataPoints[1::2]) # Every other value (from 1)
+  dataY = [i for j in dataY for i in j] # Strip double brackets
+  squareY = []
+  
+  # Let xy represent the product of x and y in their respective ordered pairs
+  global dataXY
+  dataXY = []
+
+# Option to remove any data points from the list before or after calculation
+def removeDataPoints():
+  while True:
+    # Display a list of the points as ordered pairs
+    os.system('clear')
+    print('Current array:\n')
+    index = 1
+    x = 0
+    y = 0
+    for point in dataX: # Print each data point as an ordered pair with an index
+      print('{0}. ({1}, {2})' .format(index, dataX[x], dataY[y]))
+      index += 1
+      x += 1
+      y += 1
+
+    print('Do you want to remove any data points?')
+    remove = input()
+
+    # Verify input
+    if remove.lower().startswith('n'): # pass
+      break
+    elif len(dataX) == 2:
+      print('There must be atleast 2 data points for regression.')
+      time.sleep(3) # Delay so user can read
+      break
+    elif remove.lower().startswith('y'): # Remove points
+      while True:
+        print('Enter the index denoting the point to be removed:')
+        try:
+          remove = int(input())
+          if int(remove) > x: # Since x counts the index, it is equal to the number of data points available
+            print('Index out of range.')
+          else: # If valid, removal procedure
+            dataX.pop(remove - 1) # Since index starts at 0, subtract 1 from the value of remove
+            dataY.pop(remove - 1)
+
+            break
+        except (ValueError, TypeError):
+          print('Invalid input.')
+    else:
+      os.system('clear')
+
+  os.system('clear')
+
+def miscValues():
+  # Data is finalized, assign values derived from it like avg
+  global copyX1, copyX2, copyX3
+  global copyY1, copyY2, copyY3
+  global n, meanX, meanY, stdX, stdY
+
+  # Number of data points
+  n = len(dataX)
+  # Means
+  meanX = np.mean(dataX)
+  meanY = np.mean(dataY)
+  # Standard Deviations
+  stdX = np.std(dataX)
+  stdY = np.std(dataY)
+  
+  # Create copies of data for recursion
+  copyX1 = dataX[:]
+  copyX2 = dataX[:] 
+  copyX3 = dataX[:] # Is there a more convenient way to do this?
+  copyY1 = dataY[:]
+  copyY2 = dataY[:]
+  copyY3 = dataY[:]
+
+  # Recursion
+  squared(copyX1, squareX) # Create list of squared X values
+  squared(copyY1, squareY) # Create list of squared Y values
+  dotProduct(copyX2, copyY2) # Create list of XY dot products
+  
+def scatterPlot():
+  # Trying to resolve the cache warning but neither of these work :(
+  #os.environ['MPLCONFIGDIR'] = '/opt/myapplication/.config/matplotlib'
+  #os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
+  
+  # Convert data to numpy array
+  x = np.array(dataX)
+  y = np.array(dataY)
+
+  # Put data points on the plane
+  plt.scatter(x, y, color="red")
+
+  # Plot linear regression as infinite line
+  plt.axline((1, e.a+e.b), slope=e.a, color="green", label="y = " + res.roundedEquation)
+  
+  # Set axis
+  plt.xlim(dataX[0] - 3*np.mean(dataX), dataX[-1] + 3*np.mean(dataX))
+  plt.ylim(dataY[0] - 3*np.mean(dataY), dataY[-1] + 3*np.mean(dataY))
+
+  # GRAPH
+  plt.axhline(y=0, color="black") # X-axis
+  plt.axvline(x=0, color="black") # Y-axis
+  plt.title("Correlation Model")
+  plt.legend(loc='best')
+
+  # Window title
+  fig = pylab.gcf()
+  fig.canvas.manager.set_window_title('Linear Regression Calculator')
+
+  # Display 
+  plt.show(block=False) # Let code continue running
+  
