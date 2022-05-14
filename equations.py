@@ -12,8 +12,8 @@ def linearRegressionAlgorithm():
   # Separate the equation into numerator and demonimator for simplicity in calculating
   global aNumerator
   global aDenominator
-  aNumerator = (f.n*sum(f.dataXY))-(sum(f.tDataX)*sum(f.tDataY))
-  aDemonimator = (f.n*sum(f.squareX))-((sum(f.tDataX))**2)
+  aNumerator = (f.n*sum(f.dataXY))-(sum(f.dataX)*sum(f.dataY))
+  aDemonimator = (f.n*sum(f.squareX))-((sum(f.dataX))**2)
 
   # Find a (slope of line of best fit)
   global a
@@ -39,8 +39,8 @@ def correlationCoefficientAlgorithm():
   global r # Let r represent the Pearson correlation coefficient
   
   # Not sure if this works
-  rNumerator = f.n*sum(f.dataXY) - sum(f.tDataX)*sum(f.tDataY)
-  rDenominator = math.sqrt((f.n*sum(f.squareX)-(sum(f.tDataX))**2)*(f.n*sum(f.squareY)-(sum(f.tDataY))**2))
+  rNumerator = f.n*sum(f.dataXY) - sum(f.dataX)*sum(f.dataY)
+  rDenominator = math.sqrt((f.n*sum(f.squareX)-(sum(f.dataX))**2)*(f.n*sum(f.squareY)-(sum(f.dataY))**2))
   try:
     r = rNumerator/rDenominator
   except ZeroDivisionError: # This happens when all y coordinates are equal
