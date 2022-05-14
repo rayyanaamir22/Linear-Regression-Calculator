@@ -1,11 +1,12 @@
 '''
 Name: Rayyan A
-Date: April 1, 2022
+Date: May 14, 2022
 Program: Linear Regression Calculator
 '''
 
 # Modules
 import os
+import matplotlib.pyplot as plt
 
 # Other Files
 import functions as f
@@ -13,41 +14,48 @@ import equations as e
 import results as res
 import goodbye as g
 
-# PROGRAM START
+def main():
+  while True:
+    # Title
+    print('LINEAR REGRESSION CALCULATOR\n')
 
-while True:
-  # Title
-  print('LINEAR REGRESSION CALCULATOR\n')
+    # Give an option to import points from a database or manually enter the coordinates
+    f.createDataPoints()
+    # Convert imported data sets to Python-readable lists
+    f.translateData()
 
-  # How to use
-
-  f.createDataPoints()
-
-  # DATA ANALYSIS FUNCTIONS
-
-  # Convert imported data sets to Python-readable lists
-  f.translateDatabase()
-
-  # For equations
-  f.squared(f.dataX, f.squareX) # Produce squareX
-  f.squared(f.dataY, f.squareY) # Produce squareY
-  f.multiply(f.rCopyX, f.rCopyY) # Produce dataXY
-
-  # Calculate the line of best fit equation (y=ax+b)
-  e.linearRegressionAlgorithm() 
-
-  # Determine data correlation values
-  e.correlationCoefficientAlgorithm()
-
-  # Return the results
-  res.correlationResults()
+    if len(f.dataX) > 2: # There must be atleast 2 points for regression
+      f.removeDataPoints()
+    else:
+      pass
+    
+    f.miscValues()
   
-  if res.reuse():
-    os.system('clear')
-    continue
-  else:
-    os.system('clear')
-    print(g.getFarewellStatement(g.farewellStatements), end='.')
-    break
+    # DATA ANALYSIS FUNCTIONS
+    
+    # Calculate the line of best fit equation (y=ax+b)
+    e.linearRegressionAlgorithm() 
+
+    # Determine Pearson Correlation Coefficient
+    e.correlationCoefficientAlgorithm()
+
+    # Return the results
+    res.correlationResults()
+
+    # Create a graph using matplotlib.pyplot
+    f.scatterPlot() 
+  
+    # Reuse program or exit
+    if res.reuse():
+      os.system('clear')
+      continue
+    else:
+      os.system('clear')
+      print(g.getFarewellStatement(g.farewellStatements),    end='.')
+      break
+
+# PROGRAM START
+if __name__ == '__main__':
+  main()
   
 # PROGRAM END
