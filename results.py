@@ -24,10 +24,7 @@ def correlationResults(): # Return the equations' results
   print('Original Data Points:')
   for i in range(len(f.dataX)):
     # Print each point as an ordered pair
-    print('({0}, {1})' .format(f.dataPoints[0], f.dataPoints[1]))
-    # Remove the first ordered pair
-    f.dataPoints.pop(0)
-    f.dataPoints.pop(0)
+    print(f'({f.dataX[i]}, {f.dataY[i]})')
 
   # Line of best fit equation in y=ax+b form
   global slope, intercept, equation
