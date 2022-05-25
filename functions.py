@@ -69,7 +69,8 @@ def createDataPoints():
       except (TypeError, ValueError): # If original input was not a number
         os.system('clear')
         print('Please enter a number.')
-
+  del dataComplete, yValid
+  
 # CONVERT DATA TO LISTS for equations
 # Recursively create list of squared values
 def squared(data, squareData):
