@@ -29,8 +29,6 @@ def linearRegressionAlgorithm():
     verticalLine = True
     a = 0
     b = 0
-    print()
-
 
 def correlationCoefficientAlgorithm():
   # The correlation coefficient represents a data set's covariance along with the direction of proportionality (direct or inverse)
@@ -45,9 +43,7 @@ def correlationCoefficientAlgorithm():
     r = rNumerator/rDenominator
   except ZeroDivisionError: # This happens when all y coordinates are equal
     r = 0
-
-
-  
+  del rNumerator, rDenominator
   
   global rStrength # Overall correlation
   global rProportionality # Direct or inverse
