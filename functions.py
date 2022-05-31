@@ -1,12 +1,12 @@
 # FUNCTIONS
 
 # Modules
-import numpy as np
-import time
+import numpy as np # Math
+import time # Misc
 #from scipy import stats
-import matplotlib.pyplot as plt
-import pylab
-import os
+import matplotlib.pyplot as plt # For graphing
+import pylab # For naming graph
+import os # Misc
 
 # Other files
 import equations as e
@@ -47,7 +47,7 @@ def createDataPoints():
           # When adding Y coordinate, the user can state that the list is finished and exit this process.
           while True: 
             os.system('clear')
-            print('Current array: ', dataPoints)
+            print(f'Current array: {dataPoints}')
             print('\nDo you want to add more points?')
             concludeData = input()
             if concludeData.lower().startswith('n'): # If yes
@@ -70,7 +70,7 @@ def createDataPoints():
         os.system('clear')
         print('Please enter a number.')
   del dataComplete, yValid
-  
+    
 # CONVERT DATA TO LISTS for equations
 # Recursively create list of squared values
 def squared(data, squareData):
@@ -123,11 +123,11 @@ def removeDataPoints():
     x = 0
     y = 0
     for point in dataX: # Print each data point as an ordered pair with an index
-      print('{0}. ({1}, {2})' .format(index, dataX[x], dataY[y]))
+      print(f'{index}. ({dataX[x]}, {dataY[y]})')
       index += 1
       x += 1
       y += 1
-
+    
     print('Do you want to remove any data points?')
     remove = input()
 
@@ -156,6 +156,7 @@ def removeDataPoints():
       os.system('clear')
 
   os.system('clear')
+  del index, x, y
 
 def miscValues():
   # Data is finalized, assign values derived from it like avg
@@ -184,6 +185,8 @@ def miscValues():
   squared(copyX1, squareX) # Create list of squared X values
   squared(copyY1, squareY) # Create list of squared Y values
   dotProduct(copyX2, copyY2) # Create list of XY dot products
+
+  del copyX1, copyX2, copyY1, copyY2
   
 def scatterPlot():
   # Trying to resolve the cache warning but neither of these work :(
@@ -198,7 +201,7 @@ def scatterPlot():
   plt.scatter(x, y, color="red")
 
   # Plot linear regression as infinite line
-  plt.axline((1, e.a+e.b), slope=e.a, color="green", label="y = " + res.roundedEquation)
+  plt.axline((1, e.a+e.b), slope=e.a, color="blue", label="y = " + res.roundedEquation)
   
   # Set axis
   plt.xlim(dataX[0] - 3*np.mean(dataX), dataX[-1] + 3*np.mean(dataX))
@@ -206,14 +209,48 @@ def scatterPlot():
 
   # GRAPH
   plt.axhline(y=0, color="black") # X-axis
+  plt.xlabel("X-axis")
   plt.axvline(x=0, color="black") # Y-axis
+  plt.ylabel("Y-axis")
   plt.title("Correlation Model")
   plt.legend(loc='best')
 
   # Window title
   fig = pylab.gcf()
-  fig.canvas.manager.set_window_title('Linear Regression Calculator')
+  fig.canvas.manager.set_window_title('Linear Regression')
 
   # Display 
   plt.show(block=False) # Let code continue running
-  
+  del x, y
+
+# Predictive function
+def predict():
+  while True:
+    print('Do you want to predict the function at a given X or Y value?')
+    varToGive = input()
+    if varToGive.lower().startswith('x'):
+      varToGive = 'X'
+      break
+    elif varToGive.lower().startswith('y'):
+      varToGive = 'Y'
+      break
+    print('(X or Y)')
+
+  while True:
+    print(f'Enter {varToGive} value:')
+    try:
+      varGiven = float(input())
+      break
+    except TypeError:
+      print('Please enter a number.')
+
+  # Calculate and show varToGive on same graph as regression
+  if varToGive == 'X':
+    y = (e.a)*varGiven+(e.b)
+    print(f'y = {e.a}({varGiven}) + {e.b}\n y = {y}')
+    plt.plot(varGiven, y, 'ro') # Doesn't show on same graph
+  else:
+    x = (varGiven-(e.b))/(e.a)
+    print(f'{varGiven} = {e.a}x + {e.b}\n x = {x}')
+    plt.plot(x, varGiven, 'ro') # Same issue
+    
