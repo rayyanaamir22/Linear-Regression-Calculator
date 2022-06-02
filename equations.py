@@ -24,6 +24,8 @@ def linearRegressionAlgorithm(n, dataX, squareX, meanX, meanY, dataY, dataXY):
     a = None
     b = None
 
+  return a, b, verticalLine
+
 def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
   # The correlation coefficient represents a data set's covariance along with the direction of proportionality (direct or inverse)
 
@@ -37,13 +39,8 @@ def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
     r = 0
   del rNumerator, rDenominator
   
-  global rStrength, rProportionality, ar
+  global rStrength, rProportionality
   ar = abs(r) # Absolute value for convenience
-  if ar > 1: # r should always be within 1 and -1.
-    print('Something went wrong; r ≯ ±1') # Is not greater than magnitude of 1
-    rStrength = 'Error'
-    rProportionality = 'Error'
-    raise ValueError
 
   # FINDING PROPORTIONALITY AND STRENGTH
     
@@ -65,3 +62,5 @@ def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
     rStrength = 'a strong'
   elif ar == 1:
     rStrength = 'a perfect'
+
+  return r, rStrength, rProportionality
