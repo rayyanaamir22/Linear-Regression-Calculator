@@ -56,7 +56,7 @@ def main():
       print('\nGraph is meaningless due to correlation coefficient of 0.')
 
     # Option to use model for a prediction
-    if not res.dataUndefined:
+    if not undefined: # Can't predict without graph
       while True:
         print('\nDo you want to use the regression to predict a value?')
         pre = input()
