@@ -1,12 +1,7 @@
 '''
 Name: Rayyan A
-Date: June 1, 2022
+Date: June 2, 2022
 Program: Linear Regression Calculator 2.0
-'''
-
-'''
-Goal:
-- Remake the code but pass parameters through the functions to improve reusability
 '''
 
 # Modules
@@ -18,6 +13,15 @@ import equations as e
 import results as res
 import goodbye as g
 
+'''
+Bugs:
+- Startup message
+- UserWarning occurs if regression is horizontal line
+
+Ideas:
+- Add an option beside prediction to save the current figure
+'''
+
 def main():
   while True:
     # Title
@@ -27,36 +31,38 @@ def main():
     data = f.createDataPoints()
     noOfPoints = len(data)
     
-    if noOfPoints > 2: # There must be atleast 2 points for regression
+    if noOfPoints > 2: # Must be atleast 2 points for regression
       f.removeDataPoints(data)
 
+    # Put the coordinates into their own lists
     xCoords = []
     yCoords = []
     for xCoord in data:
       xCoords.append(xCoord)
       yCoords.append(data[xCoord])
 
-    dataXY, meanX, meanY, squareX, squareY, stdX, stdY = f.miscValues(xCoords, yCoords)
-  
+    # Use the lists to get values used in linear regression
+    dataXY, meanX, meanY, squareX, squareY, stdX, stdY = f.miscValues(xCoords, yCoords) # std is extra
+
+    # Convert the lists to tuples so they remain unaltered
+    xCoords, yCoords = tuple(xCoords), tuple(yCoords)
+    
     # DATA ANALYSIS FUNCTIONS
     
     # Calculate the line of best fit equation (y=ax+b)
     slope, intercept, undefined = e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, meanX, meanY, yCoords, dataXY) 
 
-    # Determine Pearson Correlation Coefficient
+    # Calculate the Pearson Correlation Coefficient
     r, strength, proportionality = e.correlationCoefficientAlgorithm(noOfPoints, xCoords, yCoords, squareX, squareY, dataXY)
 
-    # Return the results
+    # Show the results
     res.correlationResults(data, stdX, stdY, slope, intercept, r, strength, proportionality, undefined)
 
     # Create a graph using matplotlib.pyplot
-    try:
+    if not undefined: 
       f.scatterPlot(xCoords, yCoords) 
-    except:
-      print('\nGraph is meaningless due to correlation coefficient of 0.')
 
-    # Option to use model for a prediction
-    if not undefined: # Can't predict without graph
+      # Option to use model for a prediction
       while True:
         print('\nDo you want to use the regression to predict a value?')
         pre = input()
@@ -69,7 +75,12 @@ def main():
           break
         else:
           print('(Yes or no)')
-  
+    else:
+      os.system('clear')
+      print('ERROR: Regression was undefined.')
+
+    
+      
     # Reuse program or exit
     if res.reuse():
       os.system('clear')
