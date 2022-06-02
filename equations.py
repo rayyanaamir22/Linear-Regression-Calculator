@@ -3,37 +3,30 @@
 # Modules
 import math
 
-# Other files
-import functions as f
-
-def linearRegressionAlgorithm(n, dataX, squareX, dataY, dataXY):
+def linearRegressionAlgorithm(n, dataX, squareX, meanX, meanY, dataY, dataXY):
   # Write out the line of best fit equation. Consider BEDMAS/PEMDAS
 
   # Equations separated into numerator and demonimator for simplicity
-  global aNumerator
-  global aDenominator
+  global aNumerator, aDenominator
   aNumerator = (n*sum(dataXY))-(sum(dataX)*sum(dataY))
   aDemonimator = (n*sum(squareX))-((sum(dataX))**2)
 
   # Find a (slope of line of best fit)
-  global a
-  global b
-  global verticalLine
+  global a, b
   try:
     a = aNumerator/aDemonimator
-    verticalLine = False
+    verticalLine = False # Undefined slope
     
     # Use slope a and mean X and Y values to determine y-intercept b
-    b = f.meanY - (a*f.meanX)
+    b = meanY - (a*meanX)
   except ZeroDivisionError:
     verticalLine = True
-    a = 0
-    b = 0
+    a = None
+    b = None
 
 def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
   # The correlation coefficient represents a data set's covariance along with the direction of proportionality (direct or inverse)
 
-  # Pearson correlation coefficient:
   global r # Let r represent the Pearson correlation coefficient
   
   rNumerator = n*sum(dataXY) - sum(dataX)*sum(dataY)
@@ -44,9 +37,7 @@ def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
     r = 0
   del rNumerator, rDenominator
   
-  global rStrength # Overall correlation
-  global rProportionality # Direct or inverse
-  global ar
+  global rStrength, rProportionality, ar
   ar = abs(r) # Absolute value for convenience
   if ar > 1: # r should always be within 1 and -1.
     print('Something went wrong; r ≯ ±1') # Is not greater than magnitude of 1
