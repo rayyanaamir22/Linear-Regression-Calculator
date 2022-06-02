@@ -16,59 +16,58 @@ def reuse():
     else:
       print('(Yes or no)')
 
-def correlationResults(): # Return the equations' results
-  # Plot the graph
-  #f.scatterPlot()
+def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, verticalLine): # Return the equations' results
+  # Display original points
+  f.displayCurrentArray(data)
+  dataUndefined = False 
   
-  # Show inputted data points for user to compare
-  print('Original Data Points:')
-  for i in range(len(f.dataX)):
-    # Print each point as an ordered pair
-    print(f'({f.dataX[i]}, {f.dataY[i]})')
-
   # Line of best fit equation in y=ax+b form
-  global slope, intercept, equation
   global roundedSlope, roundedIntercept, roundedEquation
-  if e.verticalLine == False: # Account for all scenarios
+
+  # Variables starting with 'd' are for display
+  if not verticalLine: # Account for all scenarios
     # Create 'ax' component
-    if e.a == 1.0: # Slope does not need to be shown
-      slope = 'x'
-      roundedSlope = slope
-    elif e.a == 0: # If a = 0 (horizontal line)
-      slope = ''
-      roundedSlope = slope
-    elif e.a == -1: # just a negative symbol
-      slope = '-x'
-      roundedSlope = slope
+    if a == 1.0: # Slope does not need to be shown
+      dSlope = 'x'
+      roundedSlope = dSlope
+    elif a == 0: # If a = 0 (horizontal line)
+      dSlope = ''
+      roundedSlope = dSlope
+    elif a == -1: # just a negative symbol
+      dSlope = '-x'
+      roundedSlope = dSlope
     else:
-      slope = f'{e.a}x'
-      roundedSlope = f'{round(e.a, 3)}x'
+      dSlope = f'{a}x'
+      roundedSlope = f'{round(a, 3)}x'
 
     # Create intercept component
-    if e.b > 0: # If y-int is positive
-      intercept = f' + {e.b}'
-      roundedIntercept = f' + {round(e.b, 3)}'
-    elif e.b < 0: # If y-int is negative
-      intercept = f' - {abs(e.b)}'
-      roundedIntercept = f' - {round(abs(e.b), 3)}'
-    elif e.b == 0: # If y-int is zero
-      intercept = ''
-      roundedIntercept = intercept
+    if b > 0: # If y-int is positive
+      dIntercept = f' + {b}'
+      roundedIntercept = f' + {round(b, 3)}'
+    elif b < 0: # If y-int is negative
+      dIntercept = f' - {abs(b)}'
+      roundedIntercept = f' - {round(abs(b), 3)}'
+    elif b == 0: # If y-int is zero
+      dIntercept = ''
+      roundedIntercept = dIntercept
 
     # Concatenate equation
-    equation = str(slope + intercept) # On console
-    roundedEquation = str(roundedSlope + roundedIntercept) # On graph
+    equation = str(dSlope + dIntercept) # For console
+    roundedEquation = str(roundedSlope + roundedIntercept) # For graph
     print(f'\nLinear Regression (Line of best fit equation):\ny = {equation}')
 
-  else: # THIS DOES NOT WORK IDKY
+  else: 
     print('Data is undefined')
-
+    dataUndefined = True
+    
   # Correlation coefficient
-  print(f'\nPearson Correlation Coefficient (r): {e.r}')
-  print(f'The data has {e.rStrength} correlation of {e.rProportionality} proportionality.')
-  if e.ar == 1.0:
+  print(f'\nPearson Correlation Coefficient (r): {r}')
+  print(f'The data has {strength} correlation of {proportionality} proportionality.')
+  if abs(r) == 1.0:
     print('Since |r| = 1, all data points exist on the linear function above.')
   
   # Covariance and Standard deviation
-  print(f'\nStandard Deviation (X): {f.stdX}') 
-  print(f'Standard Deviation (Y): {f.stdY}')
+  print(f'\nStandard Deviation (X): {stdX}') 
+  print(f'Standard Deviation (Y): {stdY}')
+  
+  # Algorithm result
