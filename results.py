@@ -1,7 +1,6 @@
 # RESULTS
 
 # Other files
-import equations as e
 import functions as f
 
 def reuse():
@@ -24,8 +23,8 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
   global roundedSlope, roundedIntercept, roundedEquation
 
   # Variables starting with 'd' are for display
-  if not verticalLine: # Account for all scenarios
-    # Create 'ax' component
+  if not verticalLine:
+    # Create slope 'ax' component
     if a == 1.0: # Slope does not need to be shown
       dSlope = 'x'
       roundedSlope = dSlope
@@ -41,7 +40,12 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
 
     # Create intercept component
     if dSlope == '':
-      dIntercept = str(b) # No need to print +/- before
+      if b == 0:
+        dSlope = ''
+        dIntercept = '0'
+        roundedIntercept = dIntercept
+      else:
+        dIntercept = roundedIntercept = str(b) # No need to print +/- before
     else:
       if b > 0: # If y-int is positive
         dIntercept = f' + {b}'
@@ -73,4 +77,3 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
   print(f'Standard Deviation (Y): {stdY}')
   
   # Algorithm result
-
