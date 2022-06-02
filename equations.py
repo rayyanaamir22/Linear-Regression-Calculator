@@ -6,14 +6,14 @@ import math
 # Other files
 import functions as f
 
-def linearRegressionAlgorithm():
+def linearRegressionAlgorithm(n, dataX, squareX, dataY, dataXY):
   # Write out the line of best fit equation. Consider BEDMAS/PEMDAS
 
-  # Separate the equation into numerator and demonimator for simplicity in calculating
+  # Equations separated into numerator and demonimator for simplicity
   global aNumerator
   global aDenominator
-  aNumerator = (f.n*sum(f.dataXY))-(sum(f.dataX)*sum(f.dataY))
-  aDemonimator = (f.n*sum(f.squareX))-((sum(f.dataX))**2)
+  aNumerator = (n*sum(dataXY))-(sum(dataX)*sum(dataY))
+  aDemonimator = (n*sum(squareX))-((sum(dataX))**2)
 
   # Find a (slope of line of best fit)
   global a
@@ -30,18 +30,17 @@ def linearRegressionAlgorithm():
     a = 0
     b = 0
 
-def correlationCoefficientAlgorithm():
+def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
   # The correlation coefficient represents a data set's covariance along with the direction of proportionality (direct or inverse)
 
   # Pearson correlation coefficient:
   global r # Let r represent the Pearson correlation coefficient
   
-  # Not sure if this works
-  rNumerator = f.n*sum(f.dataXY) - sum(f.dataX)*sum(f.dataY)
-  rDenominator = math.sqrt((f.n*sum(f.squareX)-(sum(f.dataX))**2)*(f.n*sum(f.squareY)-(sum(f.dataY))**2))
+  rNumerator = n*sum(dataXY) - sum(dataX)*sum(dataY)
+  rDenominator = math.sqrt((n*sum(squareX)-(sum(dataX))**2)*(n*sum(squareY)-(sum(dataY))**2))
   try:
     r = rNumerator/rDenominator
-  except ZeroDivisionError: # This happens when all y coordinates are equal
+  except ZeroDivisionError: # This happens when all y coordinates are equal (undefined slope)
     r = 0
   del rNumerator, rDenominator
   
