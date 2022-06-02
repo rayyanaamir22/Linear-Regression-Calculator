@@ -3,7 +3,6 @@
 # Modules
 import numpy as np # Math
 import time # Misc
-#from scipy import stats
 import matplotlib.pyplot as plt # For graphing
 import pylab # For naming graph
 import os # Misc
@@ -12,22 +11,29 @@ import os # Misc
 import equations as e
 import results as res
 
-# User creates their custom array of data points
-def createDataPoints():
-  
-  global dataPoints
-  dataPoints = []
-  global dataInput
-  global dataComplete
-  dataComplete = False
-  while dataComplete == False:
+# Take the dataPoints dictionary and display it as coordinates
+def displayCurrentArray(dataPoints):
+  print('Current Array:\n')
+  for index, xCoord in enumerate(dataPoints):
+    print(f'{index+1}. ({xCoord}, {dataPoints[xCoord]})')
 
+    if index == len(dataPoints):
+      print('\n')
+      break
+
+def createDataPoints():
+  global dataPoints
+  dataPoints = {} # Save each coordinate as a key-value pair
+  
+  dataComplete = False
+  
+  while dataComplete == False:
     # X COORDINATES
     while True:
       try: # Try statement will force input to be a number
         dataInput = float(input('Enter X value: '))
         if type(dataInput) == float or type(dataInput) == int: # If input is a number
-          dataPoints.append(dataInput) # Add it to the list
+          newCoordX = dataInput
           break
         else:
           os.system('clear')
@@ -37,21 +43,24 @@ def createDataPoints():
         print('Please enter a number.')
 
     # Y COORDINATES (mostly same as X)
-    yValid = False # Variable to account for the nested loop
-    while yValid == False:
+    yIsValid = False # Variable to account for the nested loop
+    while yIsValid == False:
       try: # Try statement will force input to be a number
         dataInput = float(input('Enter Y value: '))
         if type(dataInput) == float or type(dataInput) == int: # If input is a number
-          dataPoints.append(dataInput) # Add it to the list
-          yValid = True
+          newCoordY = dataInput
+          yIsValid = True
           # When adding Y coordinate, the user can state that the list is finished and exit this process.
+
+          dataPoints[newCoordX] = newCoordY # Add the data point as a new key-value pair in format: { x : y }
+    
           while True: 
             os.system('clear')
-            print(f'Current array: {dataPoints}')
+            displayCurrentArray(dataPoints)
             print('\nDo you want to add more points?')
             concludeData = input()
             if concludeData.lower().startswith('n'): # If yes
-              if len(dataPoints)/2 == 1: # Not enough points
+              if len(dataPoints) < 2: # Not enough points
                 print('There must be atleast 2 data points.\n')
                 dataComplete = False
                 break
@@ -69,8 +78,11 @@ def createDataPoints():
       except (TypeError, ValueError): # If original input was not a number
         os.system('clear')
         print('Please enter a number.')
-  del dataComplete, yValid
     
+  del dataComplete, yIsValid
+
+  return dataPoints
+  
 # CONVERT DATA TO LISTS for equations
 # Recursively create list of squared values
 def squared(data, squareData):
@@ -92,62 +104,49 @@ def dotProduct(data1, data2):
     return dotProduct(data1, data2)
 
 # CONVERT DATA TO LISTS for equations
-def translateData():
+def translateData(dataPoints):
   # Assign a variable for each component of the data being imported. They will be used for the impending statistics equations.
   
-  # Let x represent the independent variable
-  global dataX, meanX, squareX
-  dataX = []
-  dataX.append(dataPoints[::2]) # Every other value (from 0)
-  dataX = [i for j in dataX for i in j] # Strip double brackets
+  global dataX, meanX, squareX, dataY, meanY, squareY
+  dataX = [] # Let x represent the independent variable
+  dataY = [] # Let y represent the dependent variable
   squareX = []
-  
-  # Let y represent the dependent variable
-  global dataY, meanY, squareY
-  dataY = []
-  dataY.append(dataPoints[1::2]) # Every other value (from 1)
-  dataY = [i for j in dataY for i in j] # Strip double brackets
   squareY = []
+  
+  for xCoord in dataPoints:
+    dataX.append(xCoord)
+    dataY.append(dataPoints[xCoord])
   
   # Let xy represent the product of x and y in their respective ordered pairs
   global dataXY
   dataXY = []
 
 # Option to remove any data points from the list before or after calculation
-def removeDataPoints():
+def removeDataPoints(dataPoints):
   while True:
     # Display a list of the points as ordered pairs
     os.system('clear')
-    print('Current array:\n')
-    index = 1
-    x = 0
-    y = 0
-    for point in dataX: # Print each data point as an ordered pair with an index
-      print(f'{index}. ({dataX[x]}, {dataY[y]})')
-      index += 1
-      x += 1
-      y += 1
+    displayCurrentArray(dataPoints)
     
     print('Do you want to remove any data points?')
     remove = input()
 
     # Verify input
-    if remove.lower().startswith('n'): # pass
+    if remove.lower().startswith('n'): # Exit
       break
-    elif len(dataX) == 2:
+    elif len(dataPoints) <= 2 and remove.lower().startswith('y'):
       print('There must be atleast 2 data points for regression.')
       time.sleep(3) # Delay so user can read
       break
-    elif remove.lower().startswith('y'): # Remove points
+    elif remove.lower().startswith('y'): # Can remove points
       while True:
         print('Enter the index denoting the point to be removed:')
         try:
           remove = int(input())
-          if int(remove) > x: # Since x counts the index, it is equal to the number of data points available
+          if remove > len(dataPoints) or remove < 1: # Since x counts the index, it is equal to the number of data points available
             print('Index out of range.')
-          else: # If valid, removal procedure
-            dataX.pop(remove - 1) # Since index starts at 0, subtract 1 from the value of remove
-            dataY.pop(remove - 1)
+          else: # If valid, remove coordinate at that index
+            dataPoints.pop(remove-1)
 
             break
         except (ValueError, TypeError):
@@ -156,7 +155,7 @@ def removeDataPoints():
       os.system('clear')
 
   os.system('clear')
-  del index, x, y
+  del remove
 
 def miscValues():
   # Data is finalized, assign values derived from it like avg
