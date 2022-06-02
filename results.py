@@ -19,7 +19,6 @@ def reuse():
 def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, verticalLine): # Return the equations' results
   # Display original points
   f.displayCurrentArray(data)
-  dataUndefined = False 
   
   # Line of best fit equation in y=ax+b form
   global roundedSlope, roundedIntercept, roundedEquation
@@ -41,15 +40,18 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
       roundedSlope = f'{round(a, 3)}x'
 
     # Create intercept component
-    if b > 0: # If y-int is positive
-      dIntercept = f' + {b}'
-      roundedIntercept = f' + {round(b, 3)}'
-    elif b < 0: # If y-int is negative
-      dIntercept = f' - {abs(b)}'
-      roundedIntercept = f' - {round(abs(b), 3)}'
-    elif b == 0: # If y-int is zero
-      dIntercept = ''
-      roundedIntercept = dIntercept
+    if dSlope == '':
+      dIntercept = str(b) # No need to print +/- before
+    else:
+      if b > 0: # If y-int is positive
+        dIntercept = f' + {b}'
+        roundedIntercept = f' + {round(b, 3)}'
+      elif b < 0: # If y-int is negative
+        dIntercept = f' - {abs(b)}'
+        roundedIntercept = f' - {round(abs(b), 3)}'
+      elif b == 0: # If y-int is zero
+        dIntercept = ''
+        roundedIntercept = dIntercept
 
     # Concatenate equation
     equation = str(dSlope + dIntercept) # For console
@@ -57,8 +59,8 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
     print(f'\nLinear Regression (Line of best fit equation):\ny = {equation}')
 
   else: 
-    print('Data is undefined')
-    dataUndefined = True
+    # Maybe say 'x=aConstant' instead of this
+    print('The regression is undefined')
     
   # Correlation coefficient
   print(f'\nPearson Correlation Coefficient (r): {r}')
@@ -71,3 +73,4 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
   print(f'Standard Deviation (Y): {stdY}')
   
   # Algorithm result
+
