@@ -3,9 +3,11 @@
 # Modules
 import numpy as np # Math
 import time # Misc
+import os # Misc
+os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
+
 import matplotlib.pyplot as plt # For graphing
 import pylab # For naming graph
-import os # Misc
 
 # Other files
 import equations as e
@@ -112,7 +114,7 @@ def removeDataPoints(dataPoints):
     os.system('clear')
     displayCurrentArray(dataPoints)
     
-    print('Do you want to remove any data points?')
+    print('\nDo you want to remove any data points?')
     remove = input()
 
     # Verify input
@@ -165,7 +167,7 @@ def miscValues(dataX, dataY):
   # Create copies of data for recursion
   copyX1 = dataX[:]
   copyX2 = dataX[:] 
-  copyX3 = dataX[:] # Is there a more convenient way to do this?
+  copyX3 = dataX[:]
   copyY1 = dataY[:]
   copyY2 = dataY[:]
   copyY3 = dataY[:]
@@ -179,11 +181,7 @@ def miscValues(dataX, dataY):
   return dataXY, meanX, meanY, squareX, squareY, stdX, stdY
   
   
-def scatterPlot(dataX, dataY):
-  # Trying to resolve the cache warning but neither of these work :(
-  #os.environ['MPLCONFIGDIR'] = '/opt/myapplication/.config/matplotlib'
-  #os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
-  
+def scatterPlot(dataX, dataY): 
   # Convert data to numpy array
   x = np.array(dataX)
   y = np.array(dataY)
