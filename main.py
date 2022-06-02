@@ -41,7 +41,7 @@ def main():
     # DATA ANALYSIS FUNCTIONS
     
     # Calculate the line of best fit equation (y=ax+b)
-    e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, yCoords, dataXY) 
+    e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, meanX, meanY, yCoords, dataXY) 
 
     # Determine Pearson Correlation Coefficient
     e.correlationCoefficientAlgorithm(noOfPoints, xCoords, yCoords, squareX, squareY, dataXY)
