@@ -104,22 +104,6 @@ def dotProduct(data1, data2):
     return dotProduct(data1, data2)
 
 # CONVERT DATA TO LISTS for equations
-def translateData(dataPoints):
-  # Assign a variable for each component of the data being imported. They will be used for the impending statistics equations.
-  
-  global dataX, meanX, squareX, dataY, meanY, squareY
-  dataX = [] # Let x represent the independent variable
-  dataY = [] # Let y represent the dependent variable
-  squareX = []
-  squareY = []
-  
-  for xCoord in dataPoints:
-    dataX.append(xCoord)
-    dataY.append(dataPoints[xCoord])
-  
-  # Let xy represent the product of x and y in their respective ordered pairs
-  global dataXY
-  dataXY = []
 
 # Option to remove any data points from the list before or after calculation
 def removeDataPoints(dataPoints):
@@ -157,14 +141,20 @@ def removeDataPoints(dataPoints):
   os.system('clear')
   del remove
 
-def miscValues():
-  # Data is finalized, assign values derived from it like avg
+def miscValues(dataX, dataY):
+  # Data is finalized, now prepare for equation
   global copyX1, copyX2, copyX3
   global copyY1, copyY2, copyY3
-  global n, meanX, meanY, stdX, stdY
+  global n, meanX, meanY, squareX, squareY, stdX, stdY
+  squareX = []
+  squareY = []  
+  
+  # XY is the product of an x coordinate and its corresponding y coordinate
+  global dataXY
+  dataXY = []
 
-  # Number of data points
-  n = len(dataX)
+  n = len(dataX) # Used in recursion
+
   # Means
   meanX = np.mean(dataX)
   meanY = np.mean(dataY)
@@ -186,8 +176,10 @@ def miscValues():
   dotProduct(copyX2, copyY2) # Create list of XY dot products
 
   del copyX1, copyX2, copyY1, copyY2
+  return dataXY, meanX, meanY, squareX, squareY, stdX, stdY
   
-def scatterPlot():
+  
+def scatterPlot(dataX, dataY):
   # Trying to resolve the cache warning but neither of these work :(
   #os.environ['MPLCONFIGDIR'] = '/opt/myapplication/.config/matplotlib'
   #os.environ['MPLCONFIGDIR'] = os.getcwd() + "/configs/"
