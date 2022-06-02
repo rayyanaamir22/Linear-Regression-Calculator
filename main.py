@@ -41,13 +41,13 @@ def main():
     # DATA ANALYSIS FUNCTIONS
     
     # Calculate the line of best fit equation (y=ax+b)
-    e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, meanX, meanY, yCoords, dataXY) 
+    slope, intercept, undefined = e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, meanX, meanY, yCoords, dataXY) 
 
     # Determine Pearson Correlation Coefficient
-    e.correlationCoefficientAlgorithm(noOfPoints, xCoords, yCoords, squareX, squareY, dataXY)
+    r, strength, proportionality = e.correlationCoefficientAlgorithm(noOfPoints, xCoords, yCoords, squareX, squareY, dataXY)
 
     # Return the results
-    res.correlationResults()
+    res.correlationResults(data, stdX, stdY, slope, intercept, r, strength, proportionality, undefined)
 
     # Create a graph using matplotlib.pyplot
     try:
