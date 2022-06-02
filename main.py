@@ -25,29 +25,33 @@ def main():
 
     # Manually enter each data point
     data = f.createDataPoints()
+    noOfPoints = len(data)
     
-    # Clean the data into 
-    f.translateData(data)
-    
-    if len(data) > 2: # There must be atleast 2 points for regression
+    if noOfPoints > 2: # There must be atleast 2 points for regression
       f.removeDataPoints(data)
-    
-    f.miscValues()
+
+    xCoords = []
+    yCoords = []
+    for xCoord in data:
+      xCoords.append(xCoord)
+      yCoords.append(data[xCoord])
+
+    dataXY, meanX, meanY, squareX, squareY, stdX, stdY = f.miscValues(xCoords, yCoords)
   
     # DATA ANALYSIS FUNCTIONS
     
     # Calculate the line of best fit equation (y=ax+b)
-    e.linearRegressionAlgorithm() 
+    e.linearRegressionAlgorithm(noOfPoints, xCoords, squareX, yCoords, dataXY) 
 
     # Determine Pearson Correlation Coefficient
-    e.correlationCoefficientAlgorithm()
+    e.correlationCoefficientAlgorithm(noOfPoints, xCoords, yCoords, squareX, squareY, dataXY)
 
     # Return the results
     res.correlationResults()
 
     # Create a graph using matplotlib.pyplot
     try:
-      f.scatterPlot() 
+      f.scatterPlot(xCoords, yCoords) 
     except:
       print('\nGraph is meaningless due to correlation coefficient of 0.')
 
