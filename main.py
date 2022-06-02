@@ -1,7 +1,12 @@
 '''
 Name: Rayyan A
-Date: May 31, 2022
-Program: Linear Regression Calculator
+Date: June 1, 2022
+Program: Linear Regression Calculator 2.0
+'''
+
+'''
+Goal:
+- Remake the code but pass parameters through the functions to improve reusability
 '''
 
 # Modules
@@ -18,15 +23,14 @@ def main():
     # Title
     print('LINEAR REGRESSION CALCULATOR\n')
 
-    # Give an option to import points from a database or manually enter the coordinates
-    f.createDataPoints()
-    # Convert imported data sets to Python-readable lists
-    f.translateData()
-
-    if len(f.dataX) > 2: # There must be atleast 2 points for regression
-      f.removeDataPoints()
-    else:
-      pass
+    # Manually enter each data point
+    data = f.createDataPoints()
+    
+    # Clean the data into 
+    f.translateData(data)
+    
+    if len(data) > 2: # There must be atleast 2 points for regression
+      f.removeDataPoints(data)
     
     f.miscValues()
   
@@ -48,18 +52,19 @@ def main():
       print('\nGraph is meaningless due to correlation coefficient of 0.')
 
     # Option to use model for a prediction
-    while True:
-      print('\nDo you want to use the regression to predict a value?')
-      pre = input()
-      if pre.lower().startswith('y'):
-        os.system('clear')
-        f.predict()
-        break
-      elif pre.lower().startswith('n'):
-        os.system('clear')
-        break
-      else:
-        print('(Yes or no)')
+    if not res.dataUndefined:
+      while True:
+        print('\nDo you want to use the regression to predict a value?')
+        pre = input()
+        if pre.lower().startswith('y'):
+          os.system('clear')
+          f.predict()
+          break
+        elif pre.lower().startswith('n'):
+          os.system('clear')
+          break
+        else:
+          print('(Yes or no)')
   
     # Reuse program or exit
     if res.reuse():
