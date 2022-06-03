@@ -168,7 +168,7 @@ def miscValues(dataX, dataY):
   copyX1 = dataX[:]
   copyX2 = dataX[:] 
   copyX3 = dataX[:]
-  copyY1 = dataY[:]
+  copyY1 = dataY[:] # Need a more efficient way for this
   copyY2 = dataY[:]
   copyY3 = dataY[:]
 
@@ -181,7 +181,7 @@ def miscValues(dataX, dataY):
   return dataXY, meanX, meanY, squareX, squareY, stdX, stdY
   
   
-def scatterPlot(dataX, dataY): 
+def scatterPlot(dataX, dataY):
   # Convert data to numpy array
   x = np.array(dataX)
   y = np.array(dataY)
@@ -213,7 +213,7 @@ def scatterPlot(dataX, dataY):
   del x, y
 
 # Predictive function
-def predict():
+def predict(a, b):
   while True:
     print('Do you want to predict the function at a given X or Y value?')
     varToGive = input()
@@ -235,11 +235,11 @@ def predict():
 
   # Calculate and show varToGive on same graph as regression
   if varToGive == 'X':
-    y = (e.a)*varGiven+(e.b)
-    print(f'y = {e.a}({varGiven}) + {e.b}\n y = {y}')
-    plt.plot(varGiven, y, 'ro') # Doesn't show on same graph
+    y = (a)*varGiven+(b)
+    print(f'y = {a}({varGiven}) + {b}\n y = {y}')
+    plt.plot(varGiven, y, 'ro')
   else:
-    x = (varGiven-(e.b))/(e.a)
-    print(f'{varGiven} = {e.a}x + {e.b}\n x = {x}')
-    plt.plot(x, varGiven, 'ro') # Same issue
+    x = (varGiven-(b))/(a)
+    print(f'{varGiven} = {a}x + {b}\n x = {x}')
+    plt.plot(x, varGiven, 'ro') 
     
