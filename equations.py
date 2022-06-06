@@ -22,14 +22,15 @@ def linearRegressionAlgorithm(n, dataX, squareX, meanX, meanY, dataY, dataXY):
   except ZeroDivisionError:
     verticalLine = True
     a = None
-    b = None
+    b = dataX[0] # Since they are all the same x-values
 
   return a, b, verticalLine
 
 def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
   # The correlation coefficient represents a data set's covariance along with the direction of proportionality (direct or inverse)
 
-  global r # Let r represent the Pearson correlation coefficient
+  # Let r represent the Pearson correlation coefficient
+  global r
   
   rNumerator = n*sum(dataXY) - sum(dataX)*sum(dataY)
   rDenominator = math.sqrt((n*sum(squareX)-(sum(dataX))**2)*(n*sum(squareY)-(sum(dataY))**2))
@@ -62,5 +63,7 @@ def correlationCoefficientAlgorithm(n, dataX, dataY, squareX, squareY, dataXY):
     rStrength = 'a strong'
   elif ar == 1:
     rStrength = 'a perfect'
+
+  return r, rStrength, rProportionality
 
   return r, rStrength, rProportionality
