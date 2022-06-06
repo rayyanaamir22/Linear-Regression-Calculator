@@ -242,6 +242,7 @@ def predict(a, b):
     x = (varGiven-(b))/(a)
     print(f'{varGiven} = {a}x + {b}\n x = {x}')
     plt.plot(x, varGiven, 'ro') 
-    
+
   print('\nThe predicted point is now on the graph.\n')
+    
     
