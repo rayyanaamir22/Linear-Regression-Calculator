@@ -1,6 +1,6 @@
 '''
 Name: Rayyan A
-Date: June 3, 2022
+Date: June 6, 2022
 Program: Linear Regression Calculator 2.0
 '''
 
@@ -12,15 +12,6 @@ import functions as f
 import equations as e
 import results as res
 import goodbye as g
-
-'''
-Bugs:
-- Startup message
-- UserWarning occurs if regression is y=0
-
-Ideas:
-- Add an option beside prediction to save the current figure
-'''
 
 def main():
   while True:
@@ -45,7 +36,7 @@ def main():
     dataXY, meanX, meanY, squareX, squareY, stdX, stdY = f.miscValues(xCoords, yCoords) # std is extra
 
     # Convert the lists to tuples so they remain unaltered
-    xCoords, yCoords = tuple(xCoords), tuple(yCoords)  # This is just for understanding, not actually necessary
+    xCoords, yCoords = tuple(xCoords), tuple(yCoords)
     
     # DATA ANALYSIS FUNCTIONS
     
@@ -57,7 +48,10 @@ def main():
 
     # Show the results
     res.correlationResults(data, stdX, stdY, slope, intercept, r, strength, proportionality, undefined)
-
+    
+    # Interpret
+    res.interpretData(slope)
+    
     # Create a graph using matplotlib.pyplot
     if not undefined: 
       f.scatterPlot(xCoords, yCoords) 
@@ -91,13 +85,6 @@ def main():
 # PROGRAM START
 if __name__ == '__main__':
   main()
-
-  '''
-  Description:
-  Linear regression is a mathematical technique to yield the most accurate line of best fit regarding ALL data points entered (including outliers if entered). This program automates the entire calculation, and it only requires the user to enter the data points they want to find the linear regression of.
-
-  Instructions:
-  When run, the program will ask the user to enter each data point manually as an ordered pair. First, the user must enter the X coordinate, followed by the corresponding Y coordinate. The inputs are stored in the dictionary 'data' as x:y pairs. Once finished, the program will calculate and return the linear regression, as well as several meaningful statistics constants like correlation coefficient and standard deviation.
-  '''
   
+# PROGRAM END
 # PROGRAM END
