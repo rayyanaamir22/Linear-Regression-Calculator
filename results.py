@@ -77,3 +77,15 @@ def correlationResults(data, stdX, stdY, a, b, r, strength, proportionality, ver
   print(f'Standard Deviation (Y): {stdY}')
   
   # Algorithm result
+def interpretData(slope):
+  if slope > 0:
+    print("The growth rate for this population is ", slope, "If this rate continues, the population could see a ")
+  elif slope < 0 > 2:
+    print("The decline rate for this population is ", slope, "The species is currently on it's way of becoming scarce")
+  elif slope > 2:
+    print("The decline rate for this species is ", slope, "There is a good possibility that this species is heading towards endangerment and in extreme cases, extinction")
+    
+  elif slope == 1:
+   print("The population is stable, reasons for this include but are not limited to: not having enough data, the species has not made a significant impact, or teh species has reached its equilibrium within its environment")
+
+  # Algorithm result
