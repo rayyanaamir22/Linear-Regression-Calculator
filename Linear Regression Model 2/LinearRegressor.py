@@ -40,13 +40,21 @@ class LinearRegressor():
         return the linear regression equation of the data.
         '''
         # Values for regression formula
-        n = len(X)
+        if len(X) == len(y):
+            if (len(X) != 0):
+                n = len(X)
+            else:
+                print("ERROR: X or y is empty.")
+                return None
+        else:
+            print("ERROR: Parallel lists X and y are off different lengths.")
+            return None
         squareX = self.square(self, X)
         dotProduct_XY = self.dotProduct(self, X, y)
 
         # Linear regression formula, divided in 2 to better handle ZeroDivisionError
         numerator = ((n * sum(dotProduct_XY)) - (sum(X) * sum(y)))
-        denominator = ((n * sum(X)) - (sum(X) ** 2))
+        denominator = ((n * sum(squareX)) - (sum(X) ** 2))
 
         # Form equation
         try:
@@ -54,6 +62,7 @@ class LinearRegressor():
             self.y_int = self.mean(self, y) - self.slope*self.mean(self, X)
         except ZeroDivisionError:
             print("ERROR: slope is undefined.")
+            return None
 
     def predict(self, X: float) -> float:
         '''
